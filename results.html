@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Results - LegalScoreIQ</title>
+    <!-- Custom Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ef4444%22/><text y=%22.9em%22 font-size=%2280%22 x=%225%22 fill=%22white%22 fill-opacity=%221%22 font-family=%22sans-serif%22 font-weight=%22bold%22>IQ</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef4444',
+                        secondary: '#b91c1c',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 15s Intensive Loader Styles */
+        #audit-loader {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .neural-core {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 2px solid #fee2e2;
+            border-radius: 50%;
+            animation: rotate var(--d) linear infinite;
+        }
+        .orbit-1 { width: 100%; height: 100%; border-top-color: #ef4444; --d: 3s; }
+        .orbit-2 { width: 75%; height: 75%; border-bottom-color: #b91c1c; --d: 2s; }
+        .orbit-3 { width: 50%; height: 50%; border-left-color: #ef4444; --d: 1s; }
+
+        @keyframes rotate { to { transform: rotate(360deg); } }
+
+        .console-box {
+            width: 100%;
+            max-width: 500px;
+            height: 120px;
+            background: #f9fafb;
+            border: 1px solid #f3f4f6;
+            border-radius: 1rem;
+            margin-top: 3rem;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .log-entry {
+            color: #9ca3af;
+            animation: slideUp 0.3s ease-out forwards;
+            margin-bottom: 2px;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #b91c1c);
+            width: 0%;
+            transition: width 15s linear;
+        }
+
+        /* Results UI Styles */
+        #results-content { display: none; }
+        .gradient-bg { background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.05), transparent); }
+        .risk-badge { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        
+        /* Calendar Card Styling */
+        .date-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
+            border: 1px solid #fee2e2;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 font-sans min-h-screen">
+
+    <!-- 15s Deep Audit Loader -->
+    <div id="audit-loader">
+        <div class="neural-core">
+            <div class="orbit orbit-1"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="orbit orbit-3"></div>
+            <div class="text-primary font-black text-2xl tracking-tighter">AI</div>
+        </div>
+        
+        <div class="mt-10 text-center">
+            <h1 class="text-xl font-black text-gray-800 uppercase tracking-widest">Deep Neural Auditing</h1>
+            <p class="text-sm text-gray-400 mt-2">Deploying ML Engines & Proofreading Logic...</p>
+        </div>
+
+        <div class="console-box" id="console-logs">
+            <!-- Logs injected here -->
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="load-bar"></div>
+        </div>
+        <p class="mt-4 text-[10px] font-bold text-gray-300 uppercase tracking-widest">Handshaking API Keys: SECURE_AUTH_v4</p>
+    </div>
+
+    <!-- Results Dashboard -->
+    <div id="results-content" class="gradient-bg min-h-screen flex flex-col animate-in fade-in duration-1000">
+        
+        <!-- Header -->
+        <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+                <button onclick="window.location.href='dashboard.html'" class="flex items-center space-x-2 text-gray-500 hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    <span class="text-sm font-bold">New Audit</span>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-primary rounded flex items-center justify-center text-white font-bold text-[10px]">IQ</div>
+                    <span class="text-sm font-extrabold text-primary">LegalScoreIQ Results</span>
+                </div>
+                <button onclick="window.print()" class="text-xs font-bold uppercase tracking-widest bg-gray-900 text-white px-4 py-2 rounded-lg">Export PDF</button>
+            </div>
+        </nav>
+
+        <main class="max-w-6xl mx-auto p-6 flex-grow">
+            
+            <!-- Risk Header Card -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="lg:col-span-1 bg-white border border-gray-100 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-sm">
+                    <div class="risk-badge w-32 h-32 rounded-full bg-green-50 border-4 border-green-500 flex items-center justify-center mb-6">
+                        <div class="text-center">
+                            <span class="block text-3xl font-black text-green-600">98</span>
+                            <span class="text-[10px] font-bold text-green-400 uppercase">Score</span>
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-black text-gray-800">LOW RISK</h2>
+                    <p class="text-xs text-gray-400 mt-2 italic">Calculated using 14.2B data points</p>
+                </div>
+
+                <!-- Summary & Quick Stats -->
+                <div class="lg:col-span-2 bg-primary rounded-3xl p-8 text-white flex flex-col justify-between shadow-xl shadow-red-500/20">
+                    <div>
+                        <h3 class="text-sm font-bold uppercase tracking-widest opacity-80 mb-4">Audit Executive Brief</h3>
+                        <p class="text-lg md:text-xl font-medium leading-relaxed">
+                            The document analysis confirms high compliance with standard commercial regulations. Minimal discrepancies found in the liability limitation clause, but the overall structure is <span class="underline decoration-wavy">legally robust</span>.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/20">
+                        <div>
+                            <p class="text-2xl font-black">0</p>
+                            <p class="text-[10px] uppercase font-bold opacity-60">High Risks</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-black">2</p>
+                            <p class="text-[10px] uppercase font-bold opacity-60">Suggestions</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-black">100%</p>
+                            <p class="text-[10px] uppercase font-bold opacity-60">Integrity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Insights (Randomized Grid) -->
+            <h3 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6 ml-2">Neural Insight Mapping</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-primary transition-colors group">
+                    <h4 class="text-xs font-bold text-primary mb-2 uppercase">Business Model</h4>
+                    <p class="text-sm text-gray-600 font-medium">B2B SaaS structure identified with recurring revenue protections.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-primary transition-colors group">
+                    <h4 class="text-xs font-bold text-primary mb-2 uppercase">Termination</h4>
+                    <p class="text-sm text-gray-600 font-medium">Standard 30-day notice period detected. Neutral positioning.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-primary transition-colors group">
+                    <h4 class="text-xs font-bold text-primary mb-2 uppercase">Data Privacy</h4>
+                    <p class="text-sm text-gray-600 font-medium">GDPR compliant terminology used in Section 12. Safe.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-primary transition-colors group">
+                    <h4 class="text-xs font-bold text-primary mb-2 uppercase">IP Clause</h4>
+                    <p class="text-sm text-gray-600 font-medium">Intellectual property rights are clearly retained by the provider.</p>
+                </div>
+            </div>
+
+            <!-- Extracted Key Dates Section (NEW) -->
+            <h3 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6 ml-2">Extracted Key Dates</h3>
+            <div class="bg-white border border-gray-100 rounded-3xl p-6 md:p-8 mb-12 shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="flex items-center space-x-6">
+                        <!-- Date Icon -->
+                        <div class="flex-shrink-0 w-20 h-20 date-card rounded-2xl overflow-hidden flex flex-col items-center justify-center border shadow-sm">
+                            <div class="w-full bg-primary text-white text-[10px] font-black uppercase text-center py-1">March</div>
+                            <div class="text-3xl font-black text-gray-800">15</div>
+                            <div class="text-[10px] font-bold text-gray-400 uppercase">2026</div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-black text-gray-800">Contract Renewal Deadline</h4>
+                            <p class="text-sm text-gray-500">Ordinary Date: 15/03/2026</p>
+                            <p class="text-xs text-primary font-bold mt-1 uppercase tracking-tight">Status: Upcoming Action Required</p>
+                        </div>
+                    </div>
+                    <div class="flex md:justify-end">
+                        <button onclick="addToCalendar()" class="group relative flex items-center space-x-3 px-6 py-4 bg-white border-2 border-primary text-primary font-black rounded-2xl hover:bg-primary hover:text-white transition-all shadow-lg shadow-red-500/5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M12 14v4"/><path d="M10 16h4"/></svg>
+                            <span>Add to Google Calendar</span>
+                            <div class="absolute -top-2 -right-2 bg-gray-900 text-white text-[8px] px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">Cloud Sync</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ask the Report Section -->
+            <div class="bg-white border-2 border-primary rounded-3xl p-8 shadow-2xl shadow-red-500/5 mb-12">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-gray-800">Ask the Report</h3>
+                        <p class="text-xs text-gray-400 font-bold uppercase">AI-Powered Query Interface</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4 mb-6" id="qa-display">
+                    <div class="bg-gray-50 p-4 rounded-2xl rounded-tl-none border border-gray-100 inline-block max-w-md text-sm">
+                        I've analyzed every sentence of your document. Ask me anything about specific clauses or potential loopholes.
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <input id="qa-input" type="text" placeholder="e.g. Is there any hidden cost mentioned in Section 4?" class="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm focus:ring-1 focus:ring-primary outline-none pr-16 shadow-inner">
+                    <button onclick="askQuestion()" class="absolute right-2 top-2 bottom-2 bg-primary text-white px-4 rounded-xl font-bold hover:bg-secondary transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Small Footer -->
+        <footer class="py-6 border-t border-gray-100 text-center text-[10px] text-gray-300 font-bold uppercase tracking-widest">
+            Neural Audit Cycle Complete • v1.0.2 Stable Build
+        </footer>
+    </div>
+
+    <script>
+        // --- 15s DEEP AUDIT ANIMATION LOGIC ---
+        const logs = [
+            "CONNECTING TO LEGAL_CORE_HUB...",
+            "AUTHENTICATING API KEYS: OK.",
+            "DEPLOYING NEURAL ENGINES [PHASE 1]...",
+            "MAPPING SENTENCE STRUCTURES...",
+            "CROSS-REFERENCING BUSINESS MODEL DATA...",
+            "SCANNING FOR HIDDEN RISKS...",
+            "IDENTIFYING JURISDICTIONAL CONTEXT...",
+            "RUNNING GRAMMAR & LOGIC CHECK...",
+            "CALCULATING RISK COEFFICIENT...",
+            "EXTRACTING KEY DATES & OBLIGATIONS...",
+            "SYNCHRONIZING WITH CLOUD STORAGE...",
+            "GENERATING FINAL INSIGHTS...",
+            "VERIFYING INTEGRITY...",
+            "AUDIT COMPLETE."
+        ];
+
+        window.onload = () => {
+            const bar = document.getElementById('load-bar');
+            const consoleBox = document.getElementById('console-logs');
+            
+            bar.style.width = '100%';
+
+            // Simulate console logs over 15s
+            logs.forEach((msg, idx) => {
+                setTimeout(() => {
+                    const entry = document.createElement('div');
+                    entry.className = "log-entry";
+                    entry.textContent = `> ${msg}`;
+                    consoleBox.appendChild(entry);
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+                }, idx * 1050); // Spread across the 15s
+            });
+
+            // Switch to results after 15s
+            setTimeout(() => {
+                document.getElementById('audit-loader').style.display = 'none';
+                document.getElementById('results-content').style.display = 'flex';
+            }, 15000);
+        };
+
+        // --- CALENDAR LOGIC ---
+        function addToCalendar() {
+            const eventTitle = encodeURIComponent("Contract Renewal Review - LegalScoreIQ");
+            const eventDetails = encodeURIComponent("Extracted from LegalScoreIQ automated audit report. Please review the highlighted risks and suggestions.");
+            const dates = "20260315T090000Z/20260315T100000Z"; // March 15, 2026
+            
+            const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&dates=${dates}&details=${eventDetails}`;
+            
+            window.open(googleCalendarUrl, '_blank');
+        }
+
+        // --- Q&A SIMULATION ---
+        function askQuestion() {
+            const input = document.getElementById('qa-input');
+            const display = document.getElementById('qa-display');
+            
+            if(!input.value.trim()) return;
+
+            // User msg
+            const userMsg = document.createElement('div');
+            userMsg.className = "flex justify-end mb-4";
+            userMsg.innerHTML = `<div class="bg-primary text-white p-4 rounded-2xl rounded-tr-none text-sm max-w-md shadow-lg">${input.value}</div>`;
+            display.appendChild(userMsg);
+
+            const q = input.value;
+            input.value = '';
+
+            // AI response simulation
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = "mb-4";
+                aiMsg.innerHTML = `<div class="bg-gray-50 p-4 rounded-2xl rounded-tl-none border border-gray-100 inline-block max-w-md text-sm shadow-sm">Based on Section 4.2 of the analyzed document, there are no hidden costs, but it specifies a flat-rate maintenance fee applicable after the first year.</div>`;
+                display.appendChild(aiMsg);
+                display.scrollTop = display.scrollHeight;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalScoreIQ</title>
+    <!-- Custom Favicon: Red background, white 'IQ' text -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ef4444%22/><text y=%22.9em%22 font-size=%2280%22 x=%225%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>IQ</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef4444', // Red
+                        secondary: '#b91c1c',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { 50% { border-color: transparent } }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #ef4444, #b91c1c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.05), transparent),
+                        radial-gradient(circle at bottom left, rgba(239, 68, 68, 0.05), transparent);
+        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        #chatbot-bubble { cursor: grab; user-select: none; touch-action: none; }
+        #chatbot-bubble:active { cursor: grabbing; }
+
+        .typewriter-cursor {
+            border-right: 3px solid #ef4444;
+            animation: blink 0.7s step-end infinite;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.reload()">
+                    <div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold text-xs">IQ</div>
+                    <span class="text-xl font-extrabold tracking-tight text-primary">LegalScoreIQ</span>
+                </div>
+                <button onclick="window.location.href='developer.html'" class="hidden md:block text-sm font-medium hover:text-primary transition-colors border-l pl-6 border-gray-200 dark:border-gray-700" data-i18n="knowDevs">
+                    Know the Developers
+                </button>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-6 mr-4">
+                    <button onclick="window.location.href='price.html'" class="text-sm font-bold text-gray-600 dark:text-gray-300 hover:text-primary transition-colors" data-i18n="pricing">Pricing</button>
+                    <button onclick="window.location.href='signup.html'" class="px-4 py-2 text-sm font-semibold text-primary hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-all" data-i18n="getStarted">Get Started</button>
+                    <button onclick="window.location.href='login.html'" class="px-5 py-2 text-sm font-semibold bg-primary text-white rounded-lg shadow-lg shadow-red-500/20 hover:bg-secondary transition-all" data-i18n="continue">Continue</button>
+                </div>
+                
+                <!-- 3-Colon Menu -->
+                <div class="relative">
+                    <button id="menuBtn" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                    </button>
+                    <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-xl py-2 z-50">
+                        <div class="px-4 py-2 text-xs text-gray-400 font-bold uppercase tracking-widest">System</div>
+                        <button onclick="toggleTheme()" class="w-full flex items-center px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <span id="themeLabel">Switch to Dark Mode</span>
+                        </button>
+                        <button onclick="window.location.href='price.html'" class="md:hidden w-full flex items-center px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700" data-i18n="pricing">Pricing</button>
+                        <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+                        <div class="px-4 py-2 text-xs text-gray-500">Version 1.0.2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="hero-gradient px-4 py-16 md:py-28 text-center">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+                <span class="inline-block px-4 py-1.5 text-xs font-bold tracking-widest text-primary uppercase bg-red-50 dark:bg-red-900/20 rounded-full" data-i18n="pillTitle">
+                    AI-Powered Research Assistant
+                </span>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded" data-i18n="betaPhase">(Under Beta Testing Phase)</span>
+            </div>
+            
+            <h1 class="text-4xl md:text-7xl font-black mb-8 leading-tight">
+                <span data-i18n="heroHead1">Proofread</span> <span class="gradient-text" data-i18n="heroHead2">Massive Legal Documents</span> <span data-i18n="heroHead3">in Seconds.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed" data-i18n="heroSub">
+                LegalScoreIQ analyzes datasets of thousands of pages to identify risks, inconsistencies, and score compliance with precision. Built for the next generation of legal tech.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="manual.pdf" target="_blank" class="w-full sm:w-auto px-10 py-4 bg-gray-900 dark:bg-white dark:text-gray-900 text-white font-bold rounded-2xl hover:scale-105 transition-transform shadow-xl" data-i18n="readDoc">
+                    Read Documentation
+                </a>
+                <button onclick="window.location.href='demo.html'" class="w-full sm:w-auto px-10 py-4 border-2 border-primary text-primary font-bold rounded-2xl hover:bg-primary hover:text-white transition-all shadow-lg shadow-red-500/10" data-i18n="watchDemo">
+                    Watch Demo
+                </button>
+            </div>
+
+            <!-- LIVE PROOFREADING ANIMATION -->
+            <div class="max-w-3xl mx-auto bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 md:p-10 border border-gray-200 dark:border-gray-700 shadow-2xl reveal">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex space-x-2">
+                        <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                        <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                        <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                    </div>
+                    <div class="text-xs font-mono text-gray-400" data-i18n="analyzing">ANALYZING_DOC_001.PDF...</div>
+                </div>
+                <div class="text-left font-mono text-sm md:text-base min-h-[120px]">
+                    <span id="typewriterText" class="text-gray-700 dark:text-gray-300"></span>
+                    <span class="typewriter-cursor"></span>
+                </div>
+                <div id="statusBadge" class="mt-8 inline-flex items-center space-x-2 px-6 py-2 rounded-full font-bold text-sm transition-all opacity-0">
+                    <div id="statusDot" class="w-2 h-2 rounded-full animate-pulse"></div>
+                    <span id="statusLabel"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Graphs Section -->
+    <section class="py-20 px-4 bg-white dark:bg-gray-900 reveal">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-i18n="graphTitle">Data-Driven Insights</h2>
+                <p class="text-gray-500" data-i18n="graphSub">Global legal compliance trends analyzed by our proprietary engine.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <!-- Risk Chart Container -->
+                <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 max-w-md mx-auto w-full">
+                    <h3 class="font-bold mb-6 text-gray-400 uppercase text-[10px] tracking-widest text-center" data-i18n="chart1Title">Risk Distribution per 1000 Pages</h3>
+                    <div class="relative h-48">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+                    <p class="mt-6 text-[9px] text-gray-400 italic text-center" data-i18n="source1">Source: LegalTech Global Compliance Report 2024</p>
+                </div>
+                <!-- Efficiency Chart Container -->
+                <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 max-w-md mx-auto w-full">
+                    <h3 class="font-bold mb-6 text-gray-400 uppercase text-[10px] tracking-widest text-center" data-i18n="chart2Title">Audit Efficiency (Manual vs IQ)</h3>
+                    <div class="relative h-48">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                    <p class="mt-6 text-[9px] text-gray-400 italic text-center" data-i18n="source2">Source: Internal Performance Benchmark Testing</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 px-4 bg-gray-50 dark:bg-gray-950 reveal">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow group">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4" data-i18n="feat1Title">Calendar Reminders</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed" data-i18n="feat1Desc">Automatically extract renewal dates and deadlines from complex contracts and sync them directly to your calendar.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow group">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-14 8.38 8.38 0 0 1 3.8.9"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4" data-i18n="feat2Title">Gap Analysis</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed" data-i18n="feat2Desc">Instantly identifies missing clauses or standard legal protections that are absent from your provided document datasets.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow group">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6 6-6"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4" data-i18n="feat3Title">Simplified Language</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed" data-i18n="feat3Desc">Converts dense "legalese" into plain English highlights so every stakeholder understands the risks involved.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 py-12 px-4 mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex flex-wrap items-center justify-center space-x-6 text-sm font-medium text-gray-500">
+                <button onclick="window.location.href='terms.html'" class="hover:text-primary transition-colors" data-i18n="terms">Terms & Conditions</button>
+                <button onclick="window.location.href='privacy.html'" class="hover:text-primary transition-colors" data-i18n="privacy">Privacy Policy</button>
+                <button onclick="window.location.href='cookie.html'" class="hover:text-primary transition-colors" data-i18n="cookies">Cookie Settings</button>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="relative">
+                <button id="langBtn" class="flex items-center space-x-2 text-sm font-semibold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-6 py-2 rounded-xl hover:border-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <span id="currentLang">English</span>
+                </button>
+                <div id="langMenu" class="hidden absolute bottom-full mb-2 right-0 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
+                    <button onclick="changeLang('English')" class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 dark:hover:bg-red-900/20">English</button>
+                    <button onclick="changeLang('Hindi')" class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 dark:hover:bg-red-900/20">Hindi (हिंदी)</button>
+                    <button onclick="changeLang('Bengali')" class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 dark:hover:bg-red-900/20">Bengali (বাংলা)</button>
+                    <button onclick="changeLang('Malayalam')" class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 dark:hover:bg-red-900/20">Malayalam (മലയാളം)</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-xs text-gray-400">© 2026 LegalScoreIQ. All rights reserved.</div>
+    </footer>
+
+    <!-- Chatbot Components -->
+    <div id="chatbot-bubble" class="fixed bottom-8 left-8 z-50 w-14 h-14 bg-primary rounded-full shadow-2xl flex items-center justify-center text-white transition-transform hover:scale-110">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+
+    <div id="chatbot-popup" class="hidden fixed bottom-24 left-8 z-50 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <div class="bg-primary p-4 text-white font-bold flex justify-between items-center">
+            <span data-i18n="chatTitle">LegalScore Assistant</span>
+            <button onclick="toggleChat()" class="text-white/80 hover:text-white">&times;</button>
+        </div>
+        <div class="h-64 p-4 overflow-y-auto text-sm space-y-4 bg-gray-50 dark:bg-gray-900" id="chatWindow">
+            <div class="bg-white dark:bg-gray-800 p-3 rounded-xl rounded-tl-none border border-gray-100 dark:border-gray-700" data-i18n="chatGreet">
+                Hello! How can I help you audit your documents today?
+            </div>
+        </div>
+        <div class="p-3 border-t border-gray-100 dark:border-gray-700 flex">
+            <input type="text" placeholder="Type a message..." class="w-full bg-gray-100 dark:bg-gray-700 border-none rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary outline-none">
+        </div>
+    </div>
+
+    <script>
+        // --- TRANSLATION DICTIONARY ---
+        const translations = {
+            'English': {
+                knowDevs: 'Know the Developers',
+                pricing: 'Pricing',
+                getStarted: 'Get Started',
+                continue: 'Continue',
+                pillTitle: 'AI-Powered Research Assistant',
+                betaPhase: '(Under Beta Testing Phase)',
+                heroHead1: 'Proofread',
+                heroHead2: 'Massive Legal Documents',
+                heroHead3: 'in Seconds.',
+                heroSub: 'LegalScoreIQ analyzes datasets of thousands of pages to identify risks, inconsistencies, and score compliance with precision. Built for the next generation of legal tech.',
+                readDoc: 'Read Documentation',
+                watchDemo: 'Watch Demo',
+                analyzing: 'ANALYZING_DOC_001.PDF...',
+                graphTitle: 'Data-Driven Insights',
+                graphSub: 'Global legal compliance trends analyzed by our proprietary engine.',
+                chart1Title: 'Risk Distribution per 1000 Pages',
+                chart2Title: 'Audit Efficiency (Manual vs IQ)',
+                source1: 'Source: LegalTech Global Compliance Report 2024',
+                source2: 'Source: Internal Performance Benchmark Testing',
+                feat1Title: 'Calendar Reminders',
+                feat1Desc: 'Automatically extract renewal dates and deadlines from complex contracts and sync them directly to your calendar.',
+                feat2Title: 'Gap Analysis',
+                feat2Desc: 'Instantly identifies missing clauses or standard legal protections that are absent from your provided document datasets.',
+                feat3Title: 'Simplified Language',
+                feat3Desc: 'Converts dense "legalese" into plain English highlights so every stakeholder understands the risks involved.',
+                terms: 'Terms & Conditions',
+                privacy: 'Privacy Policy',
+                cookies: 'Cookie Settings',
+                chatTitle: 'LegalScore Assistant',
+                chatGreet: 'Hello! How can I help you audit your documents today?'
+            },
+            'Hindi': {
+                knowDevs: 'डेवलपर्स को जानें',
+                pricing: 'कीमतें',
+                getStarted: 'शुरू करें',
+                continue: 'जारी रखें',
+                pillTitle: 'एआई-संचालित अनुसंधान सहायक',
+                betaPhase: '(बीटा परीक्षण चरण के तहत)',
+                heroHead1: 'सेकंड में',
+                heroHead2: 'विशाल कानूनी दस्तावेजों',
+                heroHead3: 'को प्रूफरीड करें।',
+                heroSub: 'लीगलस्कोरआईक्यू जोखिमों, विसंगतियों की पहचान करने और सटीकता के साथ अनुपालन स्कोर करने के लिए हजारों पृष्ठों के डेटासेट का विश्लेषण करता है।',
+                readDoc: 'दस्तावेज़ीकरण पढ़ें',
+                watchDemo: 'डेमो देखें',
+                analyzing: 'दस्तावेज़_001.PDF का विश्लेषण हो रहा है...',
+                graphTitle: 'डेटा-संचालित अंतर्दृष्टि',
+                graphSub: 'हमारे मालिकाना इंजन द्वारा वैश्विक कानूनी अनुपालन रुझानों का विश्लेषण।',
+                chart1Title: 'प्रति 1000 पृष्ठों पर जोखिम वितरण',
+                chart2Title: 'ऑडिट दक्षता (मैनुअल बनाम IQ)',
+                source1: 'स्रोत: लीगलटेक ग्लोबल कॉम्प्लायंस रिपोर्ट 2024',
+                source2: 'स्रोत: आंतरिक प्रदर्शन बेंचमार्क परीक्षण',
+                feat1Title: 'कैलेंडर अनुस्मारक',
+                feat1Desc: 'जटिल अनुबंधों से स्वतः नवीनीकरण तिथियां और समय सीमा निकालें और उन्हें सीधे अपने कैलेंडर में सिंक करें।',
+                feat2Title: 'गैप विश्लेषण',
+                feat2Desc: 'आपके द्वारा प्रदान किए गए दस्तावेज़ डेटासेट से गायब धाराओं या कानूनी सुरक्षा की पहचान तुरंत करता है।',
+                feat3Title: 'सरलीकृत भाषा',
+                feat3Desc: 'घनी कानूनी भाषा को स्पष्ट अंग्रेजी हाइलाइट्स में बदलता है ताकि हर हितधारक जोखिमों को समझ सके।',
+                terms: 'नियम और शर्तें',
+                privacy: 'गोपनीयता नीति',
+                cookies: 'कुकी सेटिंग्स',
+                chatTitle: 'लीगलस्कोर सहायक',
+                chatGreet: 'नमस्ते! मैं आज आपके दस्तावेजों के ऑडिट में कैसे मदद कर सकता हूँ?'
+            },
+            'Bengali': {
+                knowDevs: 'ডেভেলপারদের জানুন',
+                pricing: 'মূল্য নির্ধারণ',
+                getStarted: 'শুরু করুন',
+                continue: 'চালিয়ে যান',
+                pillTitle: 'এআই-চালিত গবেষণা সহকারী',
+                betaPhase: '(বিটা টেস্টিং পর্যায়ের অধীনে)',
+                heroHead1: 'কয়েক সেকেন্ডে',
+                heroHead2: 'বিশাল আইনি নথি',
+                heroHead3: 'প্রুফরিড করুন।',
+                heroSub: 'LegalScoreIQ হাজার হাজার পৃষ্ঠার ডেটাসেট বিশ্লেষণ করে ঝুঁকি এবং অসঙ্গতিগুলি চিহ্নিত করতে এবং নির্ভুলতার সাথে সম্মতি স্কোর করতে সক্ষম।',
+                readDoc: 'নথিপত্র পড়ুন',
+                watchDemo: 'ডেমো দেখুন',
+                analyzing: 'নথি_001.PDF বিশ্লেষণ করা হচ্ছে...',
+                graphTitle: 'তথ্য-চালিত অন্তর্দৃষ্টি',
+                graphSub: 'আমাদের ইঞ্জিন দ্বারা বৈশ্বিক আইনি সম্মতি প্রবণতা বিশ্লেষণ।',
+                chart1Title: 'প্রতি ১০০০ পৃষ্ঠায় ঝুঁকি বিতরণ',
+                chart2Title: 'অডিট দক্ষতা (ম্যানুয়াল বনাম IQ)',
+                source1: 'সূত্র: লিগ্যালটেক গ্লোবাল কমপ্লায়েন্স রিপোর্ট ২০২৪',
+                source2: 'সূত্র: অভ্যন্তরীণ কর্মক্ষমতা বেঞ্চমার্ক টেস্টিং',
+                feat1Title: 'ক্যালেন্ডার অনুস্মারক',
+                feat1Desc: 'জটিল চুক্তি থেকে স্বয়ংক্রিয়ভাবে পুনর্নবীকরণের তারিখ এবং সময়সীমা বের করুন এবং সরাসরি আপনার ক্যালেন্ডারে সিঙ্ক করুন।',
+                feat2Title: 'ফাঁক বিশ্লেষণ',
+                feat2Desc: 'আপনার প্রদান করা নথিপত্র থেকে অনুপস্থিত ধারা বা আইনি সুরক্ষাগুলি অবিলম্বে সনাক্ত করে।',
+                feat3Title: 'সহজ ভাষা',
+                feat3Desc: 'কঠিন আইনি ভাষাকে সহজ ইংরেজিতে রূপান্তরিত করে যাতে প্রতিটি অংশীদার ঝুঁকিগুলি বুঝতে পারে।',
+                terms: 'শর্তাবলী',
+                privacy: 'গোপনীয়তা নীতি',
+                cookies: 'কুকি সেটিংস',
+                chatTitle: 'LegalScore সহকারী',
+                chatGreet: 'হ্যালো! আজ আমি আপনার নথিপত্র অডিট করতে কীভাবে সাহায্য করতে পারি?'
+            },
+            'Malayalam': {
+                knowDevs: 'ഡെവലപ്പർമാരെ അറിയുക',
+                pricing: 'നിരക്കുകൾ',
+                getStarted: 'ആരംഭിക്കുക',
+                continue: 'തുടരുക',
+                pillTitle: 'AI-അധിഷ്ഠിത ഗവേഷണ സഹായി',
+                betaPhase: '(ബീറ്റാ ടെസ്റ്റിംഗ് ഘട്ടത്തിൽ)',
+                heroHead1: 'സെക്കൻഡുകൾക്കുള്ളിൽ',
+                heroHead2: 'വമ്പിച്ച നിയമ രേഖകൾ',
+                heroHead3: 'പ്രൂഫ് റീഡ് ചെയ്യുക.',
+                heroSub: 'LegalScoreIQ ആയിരക്കണക്കിന് പേജുകളുടെ ഡാറ്റാസെറ്റുകൾ വിശകലനം ചെയ്ത് അപകടസാധ്യതകളും പൊരുത്തക്കേടുകളും തിരിച്ചറിയുന്നു.',
+                readDoc: 'ഡോക്യുമെന്റേഷൻ വായിക്കുക',
+                watchDemo: 'ഡെമോ കാണുക',
+                analyzing: 'രേഖ_001.PDF വിശകലനം ചെയ്യുന്നു...',
+                graphTitle: 'ഡാറ്റ അടിസ്ഥാനമാക്കിയുള്ള സ്ഥിതിവിവരക്കണക്കുകൾ',
+                graphSub: 'ആഗോള നിയമ പാലന പ്രവണതകളുടെ വിശകലനം.',
+                chart1Title: '1000 പേജുകളിലെ റിസ്ക് വിതരണം',
+                chart2Title: 'ഓഡിറ്റ് കാര്യക്ഷമത (മാനുവൽ vs IQ)',
+                source1: 'ഉറവിടം: ലീഗൽടെക് ഗ്ലോബൽ കംപ്ലയൻസ് റിപ്പോർട്ട് 2024',
+                source2: 'ഉറവിടം: ആന്തരിക പ്രകടന ബെഞ്ച്മാർക്ക് ടെസ്റ്റിംഗ്',
+                feat1Title: 'കലണ്ടർ റിമൈൻഡറുകൾ',
+                feat1Desc: 'കരാറുകളിൽ നിന്ന് തീയതികളും സമയപരിധികളും സ്വയമേവ വേർതിരിച്ചെടുത്ത് കലണ്ടറിലേക്ക് സിങ്ക് ചെയ്യുക.',
+                feat2Title: 'ഗാപ് അനാലിസിസ്',
+                feat2Desc: 'രേഖകളിൽ ഇല്ലാത്ത പ്രധാന നിയമ സുരക്ഷാ വ്യവസ്ഥകൾ തൽക്ഷണം കണ്ടെത്തുന്നു.',
+                feat3Title: 'ലളിതമായ ഭാഷ',
+                feat3Desc: 'സങ്കീർണ്ണമായ നിയമ ഭാഷ ലളിതമാക്കി എല്ലാവർക്കും മനസ്സിലാകുന്ന രീതിയിൽ അവതരിപ്പിക്കുന്നു.',
+                terms: 'നിബന്ധനകളും വ്യവസ്ഥകളും',
+                privacy: 'സ്വകാര്യതാ നയം',
+                cookies: 'കുക്കി ക്രമീകരണങ്ങൾ',
+                chatTitle: 'ലീഗൽസ്കോർ അസിസ്റ്റന്റ്',
+                chatGreet: 'ഹലോ! ഇന്ന് നിങ്ങളുടെ ഡോക്യുമെന്റുകൾ ഓഡിറ്റ് ചെയ്യാൻ എനിക്ക് എങ്ങനെ സഹായിക്കാനാകും?'
+            }
+        };
+
+        function changeLang(lang) {
+            document.getElementById('currentLang').textContent = lang;
+            const dict = translations[lang];
+            
+            // Iterate over all elements with data-i18n and swap text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.textContent = dict[key];
+                }
+            });
+            
+            // Update typewriter scenarios separately to match language
+            // (Optional improvement: could map scenarios as well)
+            
+            // Persist preference
+            localStorage.setItem('preferredLang', lang);
+            
+            // Close menu
+            document.getElementById('langMenu').classList.add('hidden');
+        }
+
+        // --- TYPEWRITER ANIMATION LOGIC ---
+        const typewriterElement = document.getElementById('typewriterText');
+        const statusBadge = document.getElementById('statusBadge');
+        const statusLabel = document.getElementById('statusLabel');
+        const statusDot = document.getElementById('statusDot');
+
+        const scenarios = [
+            { text: "SECTION 4.2: This contract may be terminated by either party with 30 days notice...", status: "Safe", color: "bg-green-500", textCol: "bg-green-100 text-green-700" },
+            { text: "LIABILITY: The service provider shall not be liable for any direct or indirect damages...", status: "High Risk", color: "bg-red-500", textCol: "bg-red-100 text-red-700" },
+            { text: "DATA USAGE: User data may be shared with third-party partners for marketing...", status: "Need Attention", color: "bg-yellow-500", textCol: "bg-yellow-100 text-yellow-700" }
+        ];
+
+        let scenarioIndex = 0;
+        function runTypewriter() {
+            const scenario = scenarios[scenarioIndex];
+            let charIndex = 0;
+            typewriterElement.textContent = "";
+            statusBadge.className = "mt-8 inline-flex items-center space-x-2 px-6 py-2 rounded-full font-bold text-sm transition-all opacity-0";
+            
+            const timer = setInterval(() => {
+                if (charIndex < scenario.text.length) {
+                    typewriterElement.textContent += scenario.text.charAt(charIndex);
+                    charIndex++;
+                } else {
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        statusBadge.className = `mt-8 inline-flex items-center space-x-2 px-6 py-2 rounded-full font-bold text-sm transition-all opacity-100 ${scenario.textCol}`;
+                        statusLabel.textContent = `Result: ${scenario.status}`;
+                        statusDot.className = `w-2 h-2 rounded-full animate-pulse ${scenario.color}`;
+                        
+                        setTimeout(() => {
+                            scenarioIndex = (scenarioIndex + 1) % scenarios.length;
+                            runTypewriter();
+                        }, 3000);
+                    }, 500);
+                }
+            }, 30);
+        }
+
+        // --- CHARTS LOGIC ---
+        function initCharts() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#9ca3af' : '#4b5563';
+
+            // Risk Chart
+            new Chart(document.getElementById('riskChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Safe', 'Warning', 'High Risk'],
+                    datasets: [{
+                        data: [72, 18, 10],
+                        backgroundColor: ['#22c55e', '#facc15', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { 
+                                color: textColor,
+                                boxWidth: 10,
+                                font: { size: 10 }
+                            } 
+                        } 
+                    }
+                }
+            });
+
+            // Efficiency Chart
+            new Chart(document.getElementById('efficiencyChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Manual', 'IQ'],
+                    datasets: [{
+                        label: 'Min / 100pg',
+                        data: [450, 2],
+                        backgroundColor: ['#9ca3af', '#ef4444'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { display: false }, ticks: { color: textColor, font: { size: 9 } } },
+                        x: { grid: { display: false }, ticks: { color: textColor, font: { size: 9 } } }
+                    },
+                    plugins: { 
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- SCROLL ANIMATION ---
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add("active");
+                }
+            });
+        }
+
+        // --- GLOBAL SETUP ---
+        window.onload = () => {
+            runTypewriter();
+            initCharts();
+            window.addEventListener("scroll", reveal);
+            reveal(); 
+            
+            // Check for saved language
+            const savedLang = localStorage.getItem('preferredLang');
+            if (savedLang && translations[savedLang]) {
+                changeLang(savedLang);
+            }
+        };
+
+        // Theme Switcher Fix for Charts
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            document.getElementById('themeLabel').textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+            Chart.getChart("riskChart").destroy();
+            Chart.getChart("efficiencyChart").destroy();
+            initCharts();
+        }
+
+        // UI Interactions
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        menuBtn.onclick = (e) => { e.stopPropagation(); dropdownMenu.classList.toggle('hidden'); };
+
+        const langBtn = document.getElementById('langBtn');
+        const langMenu = document.getElementById('langMenu');
+        langBtn.onclick = (e) => { e.stopPropagation(); langMenu.classList.toggle('hidden'); };
+
+        window.onclick = () => {
+            dropdownMenu.classList.add('hidden');
+            langMenu.classList.add('hidden');
+        };
+
+        function toggleChat() { document.getElementById('chatbot-popup').classList.toggle('hidden'); }
+
+        // Draggable Logic
+        const bubble = document.getElementById('chatbot-bubble');
+        let isDragging = false;
+        let startX, startY;
+
+        bubble.addEventListener('mousedown', (e) => {
+            isDragging = false;
+            startX = e.clientX;
+            startY = e.clientY;
+            const onMove = (m) => {
+                if (Math.abs(m.clientX - startX) > 5) {
+                    isDragging = true;
+                    bubble.style.left = m.clientX - 28 + 'px';
+                    bubble.style.top = m.clientY - 28 + 'px';
+                    bubble.style.bottom = 'auto';
+                }
+            };
+            const onUp = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+                if (!isDragging) toggleChat();
+            };
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        });
+    </script>
+</body>
+</html>

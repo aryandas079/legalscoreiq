@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Settings - LegalScoreIQ</title>
+    <!-- Custom Favicon: Red background, white 'IQ' text -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ef4444%22/><text y=%22.9em%22 font-size=%2280%22 x=%225%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>IQ</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef4444',
+                        secondary: '#b91c1c',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+        }
+        .pulse-primary {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .7; }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Nav -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <button onclick="window.location.href='index.html'" class="group flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors">
+                <div class="p-2 group-hover:bg-red-50 rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </div>
+                <span class="font-semibold text-sm">Return</span>
+            </button>
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 bg-primary rounded flex items-center justify-center text-white font-bold text-[10px]">IQ</div>
+                <span class="text-sm font-extrabold tracking-tight text-primary">LegalScoreIQ</span>
+            </div>
+            <div class="w-10"></div> <!-- Spacer for centering -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow hero-gradient flex items-center justify-center p-6">
+        <div class="max-w-2xl w-full bg-white rounded-3xl shadow-xl shadow-red-500/5 border border-gray-100 p-8 md:p-12 text-center reveal transition-all duration-700">
+            
+            <div class="w-20 h-20 bg-red-50 text-primary rounded-full flex items-center justify-center mx-auto mb-8 pulse-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-black text-gray-900 mb-6">Cookie <span class="text-primary">Settings</span></h1>
+            
+            <div class="space-y-6">
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    We are currently preparing our advanced personalization and analytics engine.
+                </p>
+                
+                <div class="p-6 bg-gray-50 rounded-2xl border border-dashed border-red-200">
+                    <p class="text-primary font-bold text-xl">
+                        "These features will work as soon as the website is live on our servers."
+                    </p>
+                </div>
+
+                <p class="text-sm text-gray-400">
+                    Thank you for your patience during our beta testing phase.
+                </p>
+            </div>
+
+            <button onclick="window.location.href='index.html'" class="mt-10 px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-secondary transition-all shadow-lg shadow-red-500/20">
+                Back to Dashboard
+            </button>
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="py-8 bg-white border-t border-gray-100 text-center">
+        <p class="text-xs text-gray-400">© 2026 LegalScoreIQ. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

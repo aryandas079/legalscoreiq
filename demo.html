@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Demo - LegalScoreIQ</title>
+    <!-- Custom Favicon: Red background, white 'IQ' text -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ef4444%22/><text y=%22.9em%22 font-size=%2280%22 x=%225%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>IQ</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef4444',
+                        secondary: '#b91c1c',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Nav -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <button onclick="window.location.href='index.html'" class="group flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors">
+                <div class="p-2 group-hover:bg-red-50 rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </div>
+                <span class="font-semibold text-sm">Return</span>
+            </button>
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 bg-primary rounded flex items-center justify-center text-white font-bold text-[10px]">IQ</div>
+                <span class="text-sm font-extrabold tracking-tight text-primary">LegalScoreIQ</span>
+            </div>
+            <div class="w-10"></div> <!-- Spacer -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow hero-gradient flex items-center justify-center p-6">
+        <div class="max-w-3xl w-full bg-white rounded-3xl shadow-xl shadow-red-500/5 border border-gray-100 p-8 md:p-12 text-center">
+            
+            <div class="relative w-24 h-24 mx-auto mb-8 animate-float">
+                <div class="absolute inset-0 bg-red-100 rounded-2xl rotate-6"></div>
+                <div class="relative w-full h-full bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+            </div>
+
+            <h1 class="text-3xl md:text-5xl font-black text-gray-900 mb-6">Interactive <span class="text-primary">Demo</span></h1>
+            
+            <div class="space-y-8">
+                <p class="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
+                    Get ready to experience the future of AI legal proofreading. We are currently finalizing our interactive environment.
+                </p>
+                
+                <div class="p-8 bg-red-50 rounded-2xl border-2 border-dashed border-red-200">
+                    <p class="text-secondary font-bold text-2xl mb-2">
+                        Deployment in Progress
+                    </p>
+                    <p class="text-primary/80 font-medium">
+                        "The interactive demo features will be available as soon as the servers are online and the website is set live on our servers."
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl">
+                        <div class="text-primary font-bold mb-1">Step 1</div>
+                        <div class="text-xs text-gray-500">Upload high-volume legal datasets.</div>
+                    </div>
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl">
+                        <div class="text-primary font-bold mb-1">Step 2</div>
+                        <div class="text-xs text-gray-500">AI processes risk scores instantly.</div>
+                    </div>
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl">
+                        <div class="text-primary font-bold mb-1">Step 3</div>
+                        <div class="text-xs text-gray-500">Export audited reports with highlights.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="window.location.href='index.html'" class="w-full sm:w-auto px-8 py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all">
+                    Back to Home
+                </button>
+                <div class="text-sm font-bold text-primary flex items-center space-x-2">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    <span>Monitoring Server Status...</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="py-8 bg-white border-t border-gray-100 text-center">
+        <p class="text-xs text-gray-400">© 2026 LegalScoreIQ. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

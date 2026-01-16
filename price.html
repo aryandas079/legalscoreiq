@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - LegalScoreIQ</title>
+    <!-- Custom Favicon: Red background, white 'IQ' text -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ef4444%22/><text y=%22.9em%22 font-size=%2280%22 x=%225%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>IQ</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef4444',
+                        secondary: '#b91c1c',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.05), transparent),
+                        radial-gradient(circle at bottom left, rgba(239, 68, 68, 0.05), transparent);
+        }
+        .price-card {
+            transition: all 0.3s ease;
+        }
+        .price-card:hover {
+            transform: translateY(-8px);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #ef4444, #b91c1c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 font-sans min-h-screen flex flex-col overflow-x-hidden">
+
+    <!-- Header / Nav -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <button onclick="window.location.href='index.html'" class="group flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors">
+                <div class="p-2 group-hover:bg-red-50 rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </div>
+                <span class="font-semibold text-sm">Dashboard</span>
+            </button>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold text-xs">IQ</div>
+                <span class="text-xl font-extrabold tracking-tight text-primary">LegalScoreIQ</span>
+            </div>
+            <div class="hidden md:block">
+                <button onclick="window.location.href='signup.html'" class="px-5 py-2 text-sm font-bold bg-primary text-white rounded-lg hover:bg-secondary transition-all">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Pricing Content -->
+    <main class="flex-grow hero-gradient py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Headline -->
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-black mb-4">Simple. <span class="gradient-text">Transparent.</span></h1>
+                <p class="text-xl text-gray-500 max-w-2xl mx-auto">No intimidating contracts. Choose the plan that fits your current legal needs.</p>
+            </div>
+
+            <!-- Pricing Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                
+                <!-- Free Plan -->
+                <div class="price-card bg-white p-8 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50 flex flex-col">
+                    <div class="mb-6">
+                        <span class="px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-bold uppercase tracking-widest rounded-full">Free Plan</span>
+                        <h3 class="text-2xl font-black mt-2 italic">“Explore”</h3>
+                        <div class="mt-4 flex items-baseline">
+                            <span class="text-4xl font-black">$0</span>
+                            <span class="text-gray-400 ml-1">/ month</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Best for: First-time users, students</p>
+                    </div>
+                    
+                    <div class="flex-grow">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Includes:</h4>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>3 contract uploads / month</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Plain-language summary</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Basic clause detection</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>High-level risk indicators</li>
+                        </ul>
+                        <div class="border-t border-dashed border-gray-100 pt-4 mb-8">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">Limitations:</p>
+                            <p class="text-[11px] text-gray-400 leading-relaxed italic">No detailed risk explanations, No contract Q&A, No obligation tracking.</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="window.location.href='signup.html'" class="w-full py-4 bg-gray-50 text-gray-900 font-bold rounded-2xl hover:bg-gray-100 transition-all">Feel the Value</button>
+                </div>
+
+                <!-- Starter Plan -->
+                <div class="price-card bg-white p-8 rounded-3xl border-2 border-primary shadow-2xl shadow-red-500/10 flex flex-col relative overflow-hidden scale-105 z-10">
+                    <div class="absolute top-0 right-0 bg-primary text-white text-[10px] font-black px-4 py-1 rounded-bl-xl uppercase tracking-widest">Most Popular</div>
+                    <div class="mb-6">
+                        <span class="px-3 py-1 bg-red-50 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full">Starter Plan</span>
+                        <h3 class="text-2xl font-black mt-2 italic">“Clarity”</h3>
+                        <div class="mt-4 flex items-baseline">
+                            <span class="text-4xl font-black">$9.99</span>
+                            <span class="text-gray-400 ml-1">/ month</span>
+                        </div>
+                        <p class="text-sm text-gray-600 font-medium mt-1">or <span class="text-primary">$99 / year</span> (~17% discount)</p>
+                        <p class="text-sm text-gray-500 mt-2">Best for: Freelancers, job seekers, individuals</p>
+                    </div>
+                    
+                    <div class="flex-grow">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Includes Everything in Free, plus:</h4>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start text-sm font-semibold"><svg class="w-4 h-4 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>20 contract uploads / month</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Detailed clause explanations</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Color-coded risk alerts (🟢🟡🔴)</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Key dates & obligations extraction</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Interactive “Ask the Contract” feature</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="window.location.href='signup.html'" class="w-full py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-red-500/20 hover:bg-secondary transition-all">Get Clarity</button>
+                    <p class="text-center text-[10px] text-gray-400 mt-4 uppercase font-bold tracking-widest italic">Our Volume Driver</p>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="price-card bg-white p-8 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50 flex flex-col">
+                    <div class="mb-6">
+                        <span class="px-3 py-1 bg-gray-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Pro Plan</span>
+                        <h3 class="text-2xl font-black mt-2 italic">“Control”</h3>
+                        <div class="mt-4 flex items-baseline">
+                            <span class="text-4xl font-black">$19.99</span>
+                            <span class="text-gray-400 ml-1">/ month</span>
+                        </div>
+                        <p class="text-sm text-gray-600 font-medium mt-1">or <span class="text-primary">$199 / year</span> (~17% discount)</p>
+                        <p class="text-sm text-gray-500 mt-2">Best for: Startups, SMEs, HR & Ops teams</p>
+                    </div>
+                    
+                    <div class="flex-grow">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Includes Everything in Starter, plus:</h4>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start text-sm font-semibold"><svg class="w-4 h-4 text-gray-900 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Unlimited contract uploads</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-gray-900 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Advanced risk detection</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-gray-900 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Contract history & tracking</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-gray-900 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Priority processing</li>
+                            <li class="flex items-start text-sm"><svg class="w-4 h-4 text-gray-900 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>Exportable summaries (PDF/Report)</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="window.location.href='signup.html'" class="w-full py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all">Take Control</button>
+                    <p class="text-center text-[10px] text-gray-400 mt-4 uppercase font-bold tracking-widest italic">Serious Graduation</p>
+                </div>
+
+            </div>
+
+            <!-- Enterprise Section -->
+            <div class="bg-gray-50 rounded-[40px] p-8 md:p-12 text-center border border-gray-100 reveal reveal-active">
+                <div class="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-primary uppercase bg-red-50 rounded-full">
+                    Future Scope
+                </div>
+                <h2 class="text-3xl font-black mb-4">Enterprise</h2>
+                <p class="text-gray-500 mb-8 max-w-xl mx-auto">Scaling for high-output teams. Custom pricing for collaboration, role-based access, and dedicated support.</p>
+                <button class="px-10 py-4 border-2 border-gray-200 text-gray-500 font-bold rounded-2xl cursor-not-allowed">Contact Us (Coming Soon)</button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-white border-t border-gray-100 text-center">
+        <p class="text-xs text-gray-400">© 2026 LegalScoreIQ. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - LegalScoreIQ</title>
+    <!-- Custom Favicon: Red background, white 'IQ' text -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ef4444%22/><text y=%22.9em%22 font-size=%2280%22 x=%225%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>IQ</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef4444',
+                        secondary: '#b91c1c',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+        }
+        .social-btn {
+            transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+        }
+        .social-btn:hover {
+            background-color: #f9fafb;
+            transform: translateY(-1px);
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Nav -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <button onclick="window.location.href='index.html'" class="group flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors">
+                <div class="p-2 group-hover:bg-red-50 rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </div>
+                <span class="font-semibold text-sm">Return</span>
+            </button>
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 bg-primary rounded flex items-center justify-center text-white font-bold text-[10px]">IQ</div>
+                <span class="text-sm font-extrabold tracking-tight text-primary uppercase">LegalScoreIQ</span>
+            </div>
+            <div class="w-10"></div> <!-- Spacer -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow hero-gradient flex items-center justify-center p-6">
+        <div class="max-w-md w-full bg-white rounded-3xl shadow-xl shadow-red-500/5 border border-gray-100 p-8 md:p-10">
+            
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-black text-gray-900 mb-2">Welcome Back</h1>
+                <p class="text-gray-500 text-sm">Log in to your LegalScoreIQ account.</p>
+            </div>
+
+            <!-- Form -->
+            <form onsubmit="event.preventDefault(); window.location.href='dashboard.html'" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                    <input type="email" required placeholder="name@company.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-gray-50/50">
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-2 ml-1">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Password</label>
+                        <a href="#" class="text-[10px] font-bold text-primary hover:underline">Forgot?</a>
+                    </div>
+                    <input type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-gray-50/50">
+                </div>
+                
+                <button type="submit" class="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-red-500/30 hover:bg-secondary transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                    Log In
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="relative my-8">
+                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
+                <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-4 text-gray-400 font-semibold tracking-tighter">Or log in with</span></div>
+            </div>
+
+            <!-- Social Logins -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="window.location.href='dashboard.html'" class="social-btn flex items-center justify-center py-3 rounded-xl">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    <span class="text-sm font-bold text-gray-700">Google</span>
+                </button>
+                <button onclick="window.location.href='dashboard.html'" class="social-btn flex items-center justify-center py-3 rounded-xl">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C4.1 16.78 4.07 10.42 7.63 10.15c1.47.07 2.24.87 3.1.87.88 0 2-.95 3.53-.8 1.4.15 2.45.68 3.13 1.62-2.9 1.73-2.43 5.4.52 6.64-.67 1.7-1.5 3.4-2.86 4.8zM12.92 9.2c-.08-2.12 1.74-4 3.84-4.04.22 2.48-2.2 4.47-3.84 4.04z"/></svg>
+                    <span class="text-sm font-bold text-gray-700">Apple</span>
+                </button>
+                <button onclick="window.location.href='dashboard.html'" class="social-btn flex items-center justify-center py-3 rounded-xl">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    <span class="text-sm font-bold text-gray-700">Facebook</span>
+                </button>
+                <button onclick="window.location.href='dashboard.html'" class="social-btn flex items-center justify-center py-3 rounded-xl">
+                    <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+                    <span class="text-sm font-bold text-gray-700">X</span>
+                </button>
+            </div>
+
+            <p class="text-center text-sm text-gray-400">
+                Don't have an account? 
+                <a href="signup.html" class="text-primary font-bold hover:underline ml-1">Create a new account</a>
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-white border-t border-gray-100 text-center">
+        <p class="text-xs text-gray-400">© 2026 LegalScoreIQ. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
